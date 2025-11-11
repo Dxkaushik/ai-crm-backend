@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
-exports.protect = (req, res, next) => {
+exports.protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -11,9 +12,17 @@ exports.protect = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role }
+
+    console.log("Decoded token:", decoded);
+    const userId = decoded.id || decoded._id;
+
+    const user = await User.findById(userId).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    req.user = user;
     next();
   } catch (err) {
+    console.error("Token verification failed:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
