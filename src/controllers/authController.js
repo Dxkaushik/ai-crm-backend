@@ -157,4 +157,19 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
-
+exports.logout = async (req, res) => {
+  try {
+   
+    res.status(200).json({
+      success: true,
+      message: "Logout successful. Please remove token from client storage."
+    });
+  } catch (error) {
+    console.error("🔥 Logout error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error during logout",
+      error: error.message
+    });
+  }
+};

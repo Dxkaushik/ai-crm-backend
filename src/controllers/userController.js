@@ -1,27 +1,38 @@
-const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const User = require("../models/User");
+const Team = require("../models/Team");
 
 exports.createUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, phone, role, teamId } = req.body;
 
-    if (!name || !email || !password || !role) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!name || !email || !password) {
+      return res.status(400).json({ message: "Name, email and password are required" });
     }
 
-    const existing = await User.findOne({ email });
-    if (existing) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
+    }
+
+    // Optional: validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({
+    const newUser = new User({
       name,
       email,
       password: hashedPassword,
-      role,
+      phone,
+      role: role || "Sales",
+      team: teamId || null,
     });
+
+    await newUser.save();
 
     res.status(201).json({
       success: true,
@@ -30,37 +41,31 @@ exports.createUser = async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        phone: newUser.phone,
         role: newUser.role,
+        team: newUser.team,
       },
     });
   } catch (error) {
     console.error("🔥 Create user error:", error);
-    res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
-
+// ✅ Get all users
 exports.getAllUsers = async (req, res) => {
-  const users = await User.find().select("-password");
-  res.json({ success: true, users });
-};
+  try {
+    const users = await User.find()
+      .select("-password")
+      .populate("team", "name");
 
-
-exports.getUserById = async (req, res) => {
-  const user = await User.findById(req.params.id).select("-password");
-  if (!user) return res.status(404).json({ message: "User not found" });
-  res.json({ success: true, user });
-};
-
-
-exports.updateUser = async (req, res) => {
-  const updates = req.body;
-  delete updates.password;
-  const updated = await User.findByIdAndUpdate(req.params.id, updates, { new: true }).select("-password");
-  res.json({ success: true, message: "User updated", user: updated });
-};
-
-exports.deleteUser = async (req, res) => {
-  await User.findByIdAndDelete(req.params.id);
-  res.json({ success: true, message: "User deleted" });
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      users,
+    });
+  } catch (error) {
+    console.error("🔥 Get users error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
 };

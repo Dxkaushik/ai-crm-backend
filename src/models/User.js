@@ -25,12 +25,17 @@ const userSchema = new mongoose.Schema(
     },
     profileImage: {
       type: String,
-      default: "", 
+      default: "",
     },
     role: {
       type: String,
       enum: ["Admin", "Director", "Manager", "TL", "Sales", "Partner"],
       default: "Sales",
+    },
+    team: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Team",
+      default: null,
     },
   },
   { timestamps: true }

@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "6912de85cb0f8a75480a757f"
+  },
+  "name": "Team A",
+  "description": "this is the team a",
+  "createdBy": {
+    "$oid": "690ed9718b8dbb3d31f8c060"
+  },
+  "members": [],
+  "createdAt": {
+    "$date": "2025-11-11T06:58:13.791Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T06:58:13.791Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6912de97cb0f8a75480a7583"
+  },
+  "name": "Team B",
+  "description": "this is the team B",
+  "createdBy": {
+    "$oid": "690ed9718b8dbb3d31f8c060"
+  },
+  "members": [],
+  "createdAt": {
+    "$date": "2025-11-11T06:58:31.589Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T06:58:31.589Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6912de9fcb0f8a75480a7587"
+  },
+  "name": "Team C",
+  "description": "this is the team C",
+  "createdBy": {
+    "$oid": "690ed9718b8dbb3d31f8c060"
+  },
+  "members": [],
+  "createdAt": {
+    "$date": "2025-11-11T06:58:39.541Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-11T06:58:39.541Z"
+  },
+  "__v": 0
+}]
