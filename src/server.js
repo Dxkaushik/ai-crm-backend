@@ -5,27 +5,30 @@ const mongoose = require("mongoose");
 
 
 const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes"); 
+const userRoutes = require("./routes/userRoutes");
 const teamRoutes = require("./routes/teamRoutes");
-const projectRoutes = require('./routes/projectRoutes');
-const channelPartnerQueryRoutes = require('./routes/channelPartnerQueryRoutes');
-const companyRoutes = require('./routes/companyRoutes');
+const projectRoutes = require("./routes/projectRoutes");
+const channelPartnerQueryRoutes = require("./routes/channelPartnerQueryRoutes");
+const companyRoutes = require("./routes/companyRoutes");
+const leadSourceRoutes = require("./routes/leadSourceRoutes");
+const leadStageRoutes = require("./routes/leadStageRoutes");
+const leadStatusRoutes = require("./routes/leadStatusRoutes");
+const leadRoutes = require("./routes/leadRoutes");
 
-dotenv.config({ path: './.env' });
-
+dotenv.config({ path: "./.env" });
 const app = express();
 
-app.use(cors({
-  origin: [
-    "https://advancedcrms.vercel.app",
-    "http://localhost:5173",
-    "http://127.0.0.1:5173"
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS,PATCH");
+  res.header("Access-Control-Allow-Headers", "Content-Type,Authorization,X-Requested-With");
+  res.header("Access-Control-Allow-Credentials", "true");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+  next();
+});
 
 app.use(express.json());
 
@@ -39,28 +42,34 @@ mongoose
   .then(() => console.log("✅ MongoDB connected successfully"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/teams", teamRoutes);
-app.use('/api/projects', projectRoutes);
-app.use('/api/channel-partner-queries', channelPartnerQueryRoutes);
-app.use('/api/companies', companyRoutes);
+app.use("/api/projects", projectRoutes);
+app.use("/api/channel-partner-queries", channelPartnerQueryRoutes);
+app.use("/api/companies", companyRoutes);
+app.use("/api/lead-sources", leadSourceRoutes);
+app.use("/api/lead-stages", leadStageRoutes);
+app.use("/api/lead-status", leadStatusRoutes);
+app.use("/api/leads", leadRoutes);
 
-
+// ✅ Simple test
 app.get("/test", (req, res) => {
-  res.json({ message: "Working!" });
+  res.json({ message: "✅ Working!" });
 });
 
+// ✅ Error handling
 app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
-
 app.use((err, req, res, next) => {
-  console.error("🔥 Server error:", err);
-  res.status(err.statusCode || 500).json({
-    message: err.message || "Internal Server Error",
-  });
+  console.error("🔥 Error:", err);
+  res.status(500).json({ message: err.message });
 });
 
+// ✅ Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
