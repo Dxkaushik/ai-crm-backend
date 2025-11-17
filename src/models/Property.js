@@ -20,7 +20,6 @@ const PropertySchema = new Schema(
       required: true
     },
 
-    // 🏢 Sub Category (Apartment, Studio, Shop, SCO, etc.)
     subCategory: {
       type: String,
       enum: [
@@ -43,6 +42,13 @@ const PropertySchema = new Schema(
       required: true
     },
 
+
+    status: {
+      type: String,
+      enum: ['Available', 'Sold', 'Rented'],
+      default: 'Available'
+    },
+
     // 💰 Investment Duration (Short / Long Term)
     investmentDuration: {
       type: String,
@@ -51,7 +57,7 @@ const PropertySchema = new Schema(
     },
 
     price: { type: Number, required: true },
-    size: { type: Number, required: true }, // e.g., sqft or sqm
+    size: { type: Number, required: true },
     bedrooms: { type: Number },
     bathrooms: { type: Number },
     balconies: { type: Number },
@@ -112,7 +118,7 @@ const PropertySchema = new Schema(
       {
         name: { type: String },
         documentUrl: { type: String, required: true },
-        type: { type: String } // e.g., Brochure, Floor Plan, Legal Doc
+        type: { type: String }
       }
     ]
   },

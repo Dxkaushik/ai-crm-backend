@@ -14,6 +14,8 @@ const leadSourceRoutes = require("./routes/leadSourceRoutes");
 const leadStageRoutes = require("./routes/leadStageRoutes");
 const leadStatusRoutes = require("./routes/leadStatusRoutes");
 const leadRoutes = require("./routes/leadRoutes");
+const propertyRoutes = require("./routes/propertyRoutes");
+const amenityRoutes = require("./routes/amenityRoutes");
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -53,6 +55,8 @@ app.use("/api/lead-sources", leadSourceRoutes);
 app.use("/api/lead-stages", leadStageRoutes);
 app.use("/api/lead-status", leadStatusRoutes);
 app.use("/api/leads", leadRoutes);
+app.use("/api/properties", propertyRoutes);
+app.use("/api/amenities", amenityRoutes);
 
 // ✅ Simple test
 app.get("/test", (req, res) => {

@@ -1,5 +1,9 @@
 const Property = require('../models/Property');
 
+
+// -------------------------------------------
+// CREATE PROPERTY
+// -------------------------------------------
 exports.createProperty = async (req, res) => {
     try {
         const {
@@ -7,9 +11,9 @@ exports.createProperty = async (req, res) => {
             title,
             description,
             propertyType,
-            subCategory,        
+            subCategory,
             listingType,
-            investmentDuration, 
+            investmentDuration,
             price,
             size,
             bedrooms,
@@ -25,10 +29,10 @@ exports.createProperty = async (req, res) => {
             amenities,
             owner,
             propertyImages,
-            brochures
+            brochures,
+            status   // 🆕 Added status here
         } = req.body;
 
-        // 🏗️ Create new property
         const property = new Property({
             project,
             title,
@@ -52,7 +56,8 @@ exports.createProperty = async (req, res) => {
             amenities,
             owner,
             propertyImages,
-            brochures
+            brochures,
+            status   // 🆕 Added status here
         });
 
         await property.save();
@@ -70,10 +75,13 @@ exports.createProperty = async (req, res) => {
 
 
 
+// -------------------------------------------
+// GET ALL PROPERTIES
+// -------------------------------------------
 exports.getAllProperties = async (req, res) => {
     try {
         const properties = await Property.find()
-            .select('title propertyType listingType location propertyImages')
+            .select('title propertyType listingType status location propertyImages') // 🆕 Include status
             .populate('project', 'name')
             .sort({ createdAt: -1 });
 
@@ -82,6 +90,7 @@ exports.getAllProperties = async (req, res) => {
             title: prop.title,
             propertyType: prop.propertyType,
             listingType: prop.listingType,
+            status: prop.status, // 🆕 Added
             location: prop.location,
             projectName: prop.project?.name || null,
             thumbnail: prop.propertyImages?.[0]?.imageUrl || null,
@@ -104,7 +113,9 @@ exports.getAllProperties = async (req, res) => {
 
 
 
-
+// -------------------------------------------
+// GET PROPERTY BY ID
+// -------------------------------------------
 exports.getPropertyById = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id)
@@ -125,9 +136,9 @@ exports.getPropertyById = async (req, res) => {
         title: property.title,
         description: property.description,
         propertyType: property.propertyType,
-        subCategory: property.subCategory, // 🆕 Added
+        subCategory: property.subCategory,
         listingType: property.listingType,
-        investmentDuration: property.investmentDuration, // 🆕 Added
+        investmentDuration: property.investmentDuration,
         price: property.price,
         size: property.size,
         bedrooms: property.bedrooms,
@@ -139,6 +150,7 @@ exports.getPropertyById = async (req, res) => {
         floorDetails: property.floorDetails,
         propertyAge: property.propertyAge,
         availableFrom: property.availableFrom,
+        status: property.status, // 🆕 Added
         location: property.location,
         project: property.project,
         amenities: property.amenities,
@@ -161,11 +173,14 @@ exports.getPropertyById = async (req, res) => {
 
 
 
+// -------------------------------------------
+// UPDATE PROPERTY
+// -------------------------------------------
 exports.updateProperty = async (req, res) => {
   try {
     const property = await Property.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body },
+      { $set: req.body }, // 🆕 status included automatically
       { new: true }
     )
       .populate("project", "name developer")
@@ -186,9 +201,9 @@ exports.updateProperty = async (req, res) => {
         title: property.title,
         description: property.description,
         propertyType: property.propertyType,
-        subCategory: property.subCategory, // 🆕 Added
+        subCategory: property.subCategory,
         listingType: property.listingType,
-        investmentDuration: property.investmentDuration, // 🆕 Added
+        investmentDuration: property.investmentDuration,
         price: property.price,
         size: property.size,
         bedrooms: property.bedrooms,
@@ -200,6 +215,7 @@ exports.updateProperty = async (req, res) => {
         floorDetails: property.floorDetails,
         propertyAge: property.propertyAge,
         availableFrom: property.availableFrom,
+        status: property.status, // 🆕 Added
         location: property.location,
         project: property.project,
         amenities: property.amenities,
@@ -221,6 +237,9 @@ exports.updateProperty = async (req, res) => {
 
 
 
+// -------------------------------------------
+// DELETE PROPERTY
+// -------------------------------------------
 exports.deleteProperty = async (req, res) => {
     try {
         const property = await Property.findByIdAndDelete(req.params.id);
@@ -246,4 +265,3 @@ exports.deleteProperty = async (req, res) => {
         });
     }
 };
-
