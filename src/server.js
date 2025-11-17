@@ -16,6 +16,11 @@ const leadStatusRoutes = require("./routes/leadStatusRoutes");
 const leadRoutes = require("./routes/leadRoutes");
 const propertyRoutes = require("./routes/propertyRoutes");
 const amenityRoutes = require("./routes/amenityRoutes");
+const leadNotesRoutes = require("./routes/leadNotesRoutes");
+const leadCallSummaryRoutes = require("./routes/leadCallSummaryRoutes");
+const leadTaskRoutes = require("./routes/leadTaskRoutes");
+const leadMOMRoutes = require("./routes/leadMOMRoutes");
+const bookingRoutes = require("./routes/bookingRoutes");
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -57,6 +62,11 @@ app.use("/api/lead-status", leadStatusRoutes);
 app.use("/api/leads", leadRoutes);
 app.use("/api/properties", propertyRoutes);
 app.use("/api/amenities", amenityRoutes);
+app.use("/api/lead-notes", leadNotesRoutes);
+app.use("/api/lead-call-summary", leadCallSummaryRoutes);
+app.use("/api/lead-tasks", leadTaskRoutes);
+app.use("/api/lead-mom", leadMOMRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 // ✅ Simple test
 app.get("/test", (req, res) => {
