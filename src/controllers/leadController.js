@@ -16,7 +16,8 @@ exports.getLeads = async (req, res) => {
         const leads = await Lead.find()
             .populate("stage")
             .populate("status")
-            .populate("source");
+            .populate("source")
+            .populate("interestedProperty");   // ✅ Added
 
         res.status(200).json({ success: true, data: leads });
     } catch (error) {
@@ -30,7 +31,8 @@ exports.getLead = async (req, res) => {
         const lead = await Lead.findById(req.params.id)
             .populate("stage")
             .populate("status")
-            .populate("source");
+            .populate("source")
+            .populate("interestedProperty");   // ✅ Added
 
         if (!lead) {
             return res.status(404).json({ success: false, message: "Lead not found" });
@@ -47,7 +49,11 @@ exports.updateLead = async (req, res) => {
     try {
         const lead = await Lead.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
-        });
+        })
+        .populate("stage")
+        .populate("status")
+        .populate("source")
+        .populate("interestedProperty");   
 
         if (!lead) {
             return res.status(404).json({ success: false, message: "Lead not found" });

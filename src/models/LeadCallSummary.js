@@ -7,10 +7,12 @@ const leadCallSummarySchema = new mongoose.Schema(
       ref: "Lead",
       required: true,
     },
+
     duration: {
       type: String,
       required: true,
     },
+
     outcome: {
       type: String,
       required: true,
@@ -20,23 +22,32 @@ const leadCallSummarySchema = new mongoose.Schema(
         "Busy",
         "Follow-up Scheduled",
         "Wrong Number",
-        "Other"
-      ]
+        "Other",
+      ],
     },
+
     nextAction: {
       type: String,
-      default: ""
+      default: "",
     },
+
     callNotes: {
       type: String,
-      default: ""
+      default: "",
     },
+
     addedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+
+
+    recordingFile: {
+      type: String,
+      default: "",
+    },
   },
-  { timestamps: true }
+  { timestamps: true } 
 );
 
 module.exports = mongoose.model("LeadCallSummary", leadCallSummarySchema);

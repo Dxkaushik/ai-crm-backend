@@ -18,7 +18,16 @@ const LeadSchema = new Schema(
       ref: 'LeadSource',
       required: true,
     },
-
+    interestedProperty: {
+      type: Schema.Types.ObjectId,
+      ref: 'Property',
+      default: null
+    },
+    leadScore: {
+      type: Number,
+      default: 0
+    },
+    
     leadCategory: {
       type: String,
       enum: ['Hot', 'Warm', 'Cold'],
@@ -41,14 +50,14 @@ const LeadSchema = new Schema(
     gender: { type: String, enum: ['Male', 'Female', 'Other'] },
     occupation: { type: String },
 
-    budgetRange: { type: String }, 
+    budgetRange: { type: String },
 
     purposeOfBuying: {
       type: String,
       enum: ['Investment', 'Self-use', 'Weekend Home', 'Rental'],
     },
 
-    preferredTimeToCall: { type: String }, 
+    preferredTimeToCall: { type: String },
     communicationPreference: {
       type: String,
       enum: ['Call', 'WhatsApp', 'Email'],

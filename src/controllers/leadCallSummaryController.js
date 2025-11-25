@@ -3,7 +3,15 @@ const LeadCallSummary = require("../models/LeadCallSummary");
 // ➤ Create Call Summary
 exports.createCallSummary = async (req, res) => {
   try {
-    const { lead, duration, outcome, nextAction, callNotes, addedBy } = req.body;
+    const {
+      lead,
+      duration,
+      outcome,
+      nextAction,
+      callNotes,
+      addedBy,
+      recordingFile 
+    } = req.body;
 
     const newSummary = new LeadCallSummary({
       lead,
@@ -11,7 +19,8 @@ exports.createCallSummary = async (req, res) => {
       outcome,
       nextAction,
       callNotes,
-      addedBy
+      addedBy,
+      recordingFile: recordingFile || ""  
     });
 
     await newSummary.save();
@@ -24,6 +33,7 @@ exports.createCallSummary = async (req, res) => {
     res.status(500).json({ message: "Error creating call summary", error });
   }
 };
+
 
 // ➤ Get All Call Summaries for a Lead
 exports.getSummariesByLead = async (req, res) => {
@@ -38,7 +48,7 @@ exports.getSummariesByLead = async (req, res) => {
   }
 };
 
-// ➤ Delete Call Summary
+
 exports.deleteCallSummary = async (req, res) => {
   try {
     await LeadCallSummary.findByIdAndDelete(req.params.id);

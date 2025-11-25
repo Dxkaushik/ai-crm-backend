@@ -21,6 +21,8 @@ const leadCallSummaryRoutes = require("./routes/leadCallSummaryRoutes");
 const leadTaskRoutes = require("./routes/leadTaskRoutes");
 const leadMOMRoutes = require("./routes/leadMOMRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
+const siteVisitRoutes = require("./routes/siteVisitRoutes");
+const leadImportExportRoutes = require("./routes/leadImportExportRoutes");
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -67,6 +69,9 @@ app.use("/api/lead-call-summary", leadCallSummaryRoutes);
 app.use("/api/lead-tasks", leadTaskRoutes);
 app.use("/api/lead-mom", leadMOMRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/site-visits", siteVisitRoutes);
+app.use("/api/leads", leadImportExportRoutes);
+
 
 // ✅ Simple test
 app.get("/test", (req, res) => {
