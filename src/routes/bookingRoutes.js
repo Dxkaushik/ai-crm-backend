@@ -12,6 +12,9 @@ router.get("/without-lead", bookingController.getBookingsWithoutLead);
 // Existing CRUD APIs
 // ================================
 
+router.get("/total/revenue", bookingController.getTotalRevenue);
+router.get("/revenue/overview", bookingController.getRevenueOverview);
+
 // Create booking
 router.post("/", bookingController.createBooking);
 

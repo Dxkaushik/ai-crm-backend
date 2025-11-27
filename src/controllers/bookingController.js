@@ -182,3 +182,87 @@ exports.getBookingsWithoutLead = async (req, res) => {
     });
   }
 };
+
+
+// ==========================================
+// Get Total Revenue
+// ==========================================
+exports.getTotalRevenue = async (req, res) => {
+  try {
+    const result = await Booking.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$bookingAmount" }
+        }
+      }
+    ]);
+
+    const totalRevenue = result.length > 0 ? result[0].totalRevenue : 0;
+
+    res.status(200).json({
+      success: true,
+      totalRevenue
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error calculating total revenue",
+      error: error.message
+    });
+  }
+};
+
+
+// ==========================================
+// Revenue Overview (Monthly Revenue by Status)
+// ==========================================
+exports.getRevenueOverview = async (req, res) => {
+  try {
+    const revenue = await Booking.aggregate([
+      {
+        $group: {
+          _id: {
+            status: "$status", 
+            month: { $dateToString: { format: "%Y-%m", date: "$createdAt" } }
+          },
+          totalRevenue: { $sum: "$bookingAmount" }
+        }
+      },
+      {
+        $sort: { "_id.month": 1 }
+      }
+    ]);
+
+    // Format output grouped by status
+    const formatted = {};
+
+    revenue.forEach(item => {
+      const status = item._id.status || "Unknown";
+      const month = item._id.month;
+
+      if (!formatted[status]) {
+        formatted[status] = [];
+      }
+
+      formatted[status].push({
+        month,
+        totalRevenue: item.totalRevenue
+      });
+    });
+
+    res.status(200).json({
+      success: true,
+      data: formatted
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching revenue overview",
+      error: error.message
+    });
+  }
+};
+

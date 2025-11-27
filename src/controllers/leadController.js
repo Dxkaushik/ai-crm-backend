@@ -79,3 +79,34 @@ exports.deleteLead = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+
+// ==========================================
+// Lead Trend Graph Stats (Daily Lead Count)
+// ==========================================
+exports.getLeadTrendStats = async (req, res) => {
+    try {
+        const stats = await Lead.aggregate([
+            {
+                $group: {
+                    _id: {
+                        $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            { $sort: { "_id": 1 } } // sort by date ascending
+        ]);
+
+        res.status(200).json({
+            success: true,
+            data: stats
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Error fetching lead trend stats",
+            error: error.message
+        });
+    }
+};

@@ -23,6 +23,8 @@ const leadMOMRoutes = require("./routes/leadMOMRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const siteVisitRoutes = require("./routes/siteVisitRoutes");
 const leadImportExportRoutes = require("./routes/leadImportExportRoutes");
+const assignedLeadRoutes = require("./routes/assignedLeadRoutes");
+
 
 dotenv.config({ path: "./.env" });
 const app = express();
@@ -71,6 +73,9 @@ app.use("/api/lead-mom", leadMOMRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/site-visits", siteVisitRoutes);
 app.use("/api/leads", leadImportExportRoutes);
+app.use("/api/assigned-leads", assignedLeadRoutes);
+app.use("/api/activities", require("./routes/activityRoutes"));
+
 
 
 // ✅ Simple test

@@ -6,10 +6,11 @@ const {
   getLeads,
   getLead,
   updateLead,
-  deleteLead
+  deleteLead,
+  getLeadTrendStats
 } = require("../controllers/leadController");
 
-
+router.get("/stats/trend", getLeadTrendStats);
 router.post("/", createLead);
 router.get("/", getLeads);
 router.get("/:id", getLead);
